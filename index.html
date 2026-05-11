@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ICAC Aviation — Institut de Compétences en Aviation et Consulting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        :root {
+            --blue: #005BA1;
+            --blue-light: #E8F2FA;
+            --orange: #E87822;
+            --orange-light: #FFF4EB;
+            --dark: #0B1A2E;
+            --gray-body: #4B5563;
+            --radius-lg: 1.25rem;
+            --radius-md: 0.875rem;
+            --radius-sm: 0.625rem;
+            --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.06);
+            --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 16px 40px rgba(0, 0, 0, 0.10);
+            --shadow-lg-soft: 0 8px 30px rgba(0, 0, 0, 0.07), 0 20px 60px rgba(0, 0, 0, 0.10);
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #1a1a2e;
+            background-color: #fafbfc;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .hero-video-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .hero-video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to right, rgba(0, 20, 50, 0.75), rgba(0, 15, 40, 0.6));
+        }
+
+        .hero-plane {
+            filter: drop-shadow(8px 16px 28px rgba(0, 0, 0, 0.35));
+            animation: gentleFloat 5s ease-in-out infinite;
+        }
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-14px) rotate(-0.5deg); }
+        }
+        .hero-plane:hover {
+            animation-play-state: paused;
+            transform: translateY(-6px) rotate(0deg);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+        }
+
+        .media-scroll::-webkit-scrollbar { height: 6px; }
+        .media-scroll::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 10px; margin: 0 20px; }
+        .media-scroll::-webkit-scrollbar-thumb { background: #c4c9d0; border-radius: 10px; }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--blue);
+            border-radius: 2px;
+            transition: width var(--transition-smooth);
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+            background: white;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            box-shadow: var(--shadow-lg-soft);
+        }
+        .mobile-menu.open {
+            max-height: 420px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .input-focus-ring {
+            transition: all var(--transition-smooth);
+        }
+        .input-focus-ring:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px rgba(0, 91, 161, 0.08);
+            outline: none;
+        }
+
+        .btn-cta {
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        .btn-cta:active { transform: scale(0.96); }
+
+        .card-lift {
+            transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+        }
+        .card-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .divider-accent {
+            width: 60px;
+            height: 4px;
+            background: var(--orange);
+            border-radius: 4px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .footer-logo-invert {
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        /* Modale */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Bouton retour haut */
+        .back-to-top {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 50;
+            background: var(--blue);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            background: var(--orange);
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100/80">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex justify-between items-center">
+            <a href="#accueil" class="shrink-0" aria-label="ICAC Aviation — Accueil">
+                <img src="logo.jpeg" alt="Logo ICAC Aviation" class="h-12 md:h-16 w-auto object-contain rounded-lg">
+            </a>
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                <a href="#accueil" class="nav-link px-3 lg:px-4 py-2 text-sm lg:text-[15px] font-semibold text-gray-700 hover:text-[#005BA1] transition-colors whitespace-nowrap">Accueil</a>
+                <a href="#a-propos" class="nav-link px-3 lg:px-4 py-2 text-sm lg:text-[15px] font-semibold text-gray-700 hover:text-[#005BA1] transition-colors whitespace-nowrap">À propos</a>
+                <a href="#formations" class="nav-link px-3 lg:px-4 py-2 text-sm lg:text-[15px] font-semibold text-gray-700 hover:text-[#005BA1] transition-colors whitespace-nowrap">Formations</a>
+                <a href="#medias" class="nav-link px-3 lg:px-4 py-2 text-sm lg:text-[15px] font-semibold text-gray-700 hover:text-[#005BA1] transition-colors whitespace-nowrap">Médias</a>
+                <a href="#inscription" class="btn-cta ml-3 lg:ml-5 bg-[#E87822] text-white px-5 lg:px-6 py-2.5 rounded-full text-sm lg:text-[15px] font-bold hover:bg-[#c95e14] transition-colors shadow-md shadow-orange-200/40 whitespace-nowrap">
+                    S'inscrire
+                </a>
+            </nav>
+            <button id="menuToggle" class="md:hidden flex flex-col gap-1.5 p-2.5 -mr-2 rounded-lg hover:bg-gray-100 transition-colors z-50" aria-label="Menu mobile" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-gray-700 rounded transition-transform duration-300 origin-center" id="bar1"></span>
+                <span class="block w-6 h-0.5 bg-gray-700 rounded transition-opacity duration-200" id="bar2"></span>
+                <span class="block w-6 h-0.5 bg-gray-700 rounded transition-transform duration-300 origin-center" id="bar3"></span>
+            </button>
+        </div>
+        <div id="mobileMenu" class="mobile-menu md:hidden px-4">
+            <nav class="flex flex-col space-y-1 pb-2">
+                <a href="#accueil" class="block py-3 px-3 font-semibold text-gray-700 hover:text-[#005BA1] hover:bg-blue-50/60 rounded-lg transition-colors">Accueil</a>
+                <a href="#a-propos" class="block py-3 px-3 font-semibold text-gray-700 hover:text-[#005BA1] hover:bg-blue-50/60 rounded-lg transition-colors">À propos</a>
+                <a href="#formations" class="block py-3 px-3 font-semibold text-gray-700 hover:text-[#005BA1] hover:bg-blue-50/60 rounded-lg transition-colors">Formations</a>
+                <a href="#medias" class="block py-3 px-3 font-semibold text-gray-700 hover:text-[#005BA1] hover:bg-blue-50/60 rounded-lg transition-colors">Médias</a>
+                <a href="#inscription" class="btn-cta block text-center mt-2 bg-[#E87822] text-white px-5 py-3.5 rounded-full font-bold hover:bg-[#c95e14] transition-colors shadow-md">S'inscrire</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="accueil" class="relative min-h-[600px] md:min-h-[700px] flex items-center text-white overflow-hidden">
+        <div class="hero-video-wrapper">
+            <video autoplay muted loop playsinline poster="medias-ICAC/ciel.jpeg">
+                <source src="medias-ICAC/déco.mp4" type="video/mp4">
+                <img src="medias-ICAC/ciel.jpeg" alt="Ciel" class="absolute inset-0 w-full h-full object-cover">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container mx-auto px-5 md:px-8 flex flex-col md:flex-row items-center relative z-10 py-12 md:py-0">
+            <div class="md:w-1/2 text-center md:text-left mt-6 md:mt-0">
+                <span class="inline-block bg-white/15 backdrop-blur-sm text-white/90 text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full mb-5 border border-white/20">
+                    Institut certifié IATA
+                </span>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-5 leading-[1.1] tracking-tight">
+                    Nous formons aux
+                    <br>
+                    <span class="text-[#FF9F43] relative inline-block">
+                        métiers de l'aviation
+                        <svg class="absolute -bottom-2 left-0 w-full h-3 opacity-50 hidden sm:block" viewBox="0 0 200 12" preserveAspectRatio="none">
+                            <path d="M0,6 Q50,0 100,6 Q150,12 200,6" stroke="#FF9F43" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </h1>
+                <p class="text-base md:text-lg lg:text-xl mb-6 max-w-xl leading-relaxed text-white/85 font-medium mx-auto md:mx-0">
+                    Cabinet spécialisé dans la formation aux métiers de l'aviation et du Tourisme, délivrant des certificats et diplômes internationaux <strong>IATA</strong>.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                    <a href="#inscription" class="btn-cta inline-flex items-center justify-center gap-2 bg-[#E87822] text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full text-base md:text-lg font-bold hover:bg-[#c95e14] transition-colors shadow-lg shadow-orange-500/25">
+                        <i class="fa-solid fa-paper-plane"></i> Commencer ma carrière
+                    </a>
+                    <a href="#a-propos" class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-6 py-3.5 md:px-8 md:py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white/20 transition-colors">
+                        En savoir plus <i class="fa-solid fa-arrow-down text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end">
+                <img src="avion.png" alt="Avion ICAC Aviation" class="hero-plane w-[80%] sm:w-[70%] md:w-full max-w-[480px] h-auto drop-shadow-2xl" loading="eager">
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180 pointer-events-none z-10">
+            <svg class="relative block w-[140%] h-8 md:h-12 text-[#fafbfc]" viewBox="0 0 1200 60" preserveAspectRatio="none">
+                <path d="M0,30 C200,55 400,5 600,30 C800,55 1000,5 1200,30 L1200,60 L0,60 Z" fill="currentColor"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- À PROPOS -->
+    <section id="a-propos" class="py-16 md:py-24 bg-white relative">
+        <div class="container mx-auto px-5 md:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                <div class="lg:w-1/2">
+                    <span class="inline-block text-[#E87822] text-sm font-bold uppercase tracking-[0.18em] mb-3 bg-orange-50 px-4 py-1.5 rounded-full">
+                        Notre institut
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B1A2E] mb-6 leading-tight">
+                        À propos de <span class="text-[#005BA1]">l'ICAC</span>
+                    </h2>
+                    <div class="w-16 h-1 bg-[#E87822] rounded mb-8 hidden sm:block"></div>
+                    <p class="text-base md:text-lg leading-relaxed text-[#4B5563] mb-6 max-w-xl">
+                        L'<strong>Institut de Compétences en Aviation et Consulting</strong> (ICAC) propose des formations théoriques et pratiques dans l'aviation civile et le tourisme, avec des certifications reconnues IATA. Nos cours sont disponibles en présentiel, en ligne ou personnalisés.
+                    </p>
+                    <p class="text-sm md:text-base leading-relaxed text-gray-500 max-w-xl">
+                        Chaque formation inclut un <strong>stage garanti</strong> pour une insertion professionnelle rapide. Niveau d'entrée : Terminale ou équivalent, avec un accompagnement personnalisé vers l'emploi.
+                    </p>
+                    <div class="mt-8 grid grid-cols-2 gap-4 max-w-md">
+                        <div class="bg-[#E8F2FA] p-4 md:p-5 rounded-2xl border border-blue-100/60 text-center card-lift">
+                            <span class="block text-3xl md:text-4xl font-extrabold text-[#005BA1] mb-1">3-6 mois</span>
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Durée des formations</span>
+                        </div>
+                        <div class="bg-[#FFF4EB] p-4 md:p-5 rounded-2xl border border-orange-100/60 text-center card-lift">
+                            <span class="block text-3xl md:text-4xl font-extrabold text-[#E87822] mb-1">Stage</span>
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Garanti</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex justify-center mt-6 lg:mt-0">
+                    <div class="relative w-full max-w-sm">
+                        <div class="absolute -inset-6 bg-gradient-to-br from-blue-100/70 to-orange-100/50 rounded-full blur-2xl opacity-70"></div>
+                        <div class="relative z-10 bg-white rounded-3xl shadow-[var(--shadow-lg-soft)] p-8 md:p-12 border border-gray-100/80">
+                            <div class="flex flex-col items-center text-center gap-4">
+                                <div class="w-16 h-16 md:w-20 md:h-20 bg-[#005BA1] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200/40 rotate-3">
+                                    <i class="fa-solid fa-graduation-cap text-2xl md:text-3xl text-white"></i>
+                                </div>
+                                <div class="w-16 h-16 md:w-20 md:h-20 bg-[#E87822] rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200/40 -rotate-3 -mt-2">
+                                    <i class="fa-solid fa-plane-departure text-2xl md:text-3xl text-white"></i>
+                                </div>
+                                <p class="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-widest mt-2">Excellence & Rigueur</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMATIONS -->
+    <section id="formations" class="py-16 md:py-24 bg-gray-50/80 relative">
+        <div class="absolute inset-0 pointer-events-none opacity-40" style="background-image: radial-gradient(circle at 80% 20%, #E8F2FA 0%, transparent 50%), radial-gradient(circle at 20% 80%, #FFF4EB 0%, transparent 50%);"></div>
+        <div class="container mx-auto px-5 md:px-8 relative z-10">
+            <div class="text-center mb-12 md:mb-16">
+                <span class="inline-block text-[#E87822] text-sm font-bold uppercase tracking-[0.18em] mb-3 bg-orange-50 px-4 py-1.5 rounded-full">Nos programmes</span>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B1A2E] mb-4">Domaines de <span class="text-[#005BA1]">Formation</span></h2>
+                <div class="divider-accent"></div>
+                <p class="text-gray-500 max-w-xl mx-auto text-sm md:text-base mb-2">Cliquez sur une formation pour voir les détails.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="formationGrid">
+                <!-- Carte 1 : Voyage et Tourisme -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="voyage">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#E8F2FA] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-earth-africa text-2xl md:text-3xl text-[#005BA1]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Voyage & Tourisme</h3>
+                    <p class="text-sm text-gray-500">GDS, billetterie, géographie du voyage.</p>
+                </div>
+                <!-- Carte 2 : Système de réservation -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="reservation">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#FFF4EB] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-laptop text-2xl md:text-3xl text-[#E87822]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Systèmes de réservation</h3>
+                    <p class="text-sm text-gray-500">Amadeus, Galileo, Sabre (GDS).</p>
+                </div>
+                <!-- Carte 3 : Hôtesse de l'air & Steward -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="pn">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#E8F2FA] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-user-tie text-2xl md:text-3xl text-[#005BA1]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Hôtesse de l'air & Steward</h3>
+                    <p class="text-sm text-gray-500">Personnel navigant commercial (PNC).</p>
+                </div>
+                <!-- Carte 4 : Fret aérien -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="fret">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#FFF4EB] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-boxes-stacked text-2xl md:text-3xl text-[#E87822]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Fret aérien & DG</h3>
+                    <p class="text-sm text-gray-500">Fret, marchandises dangereuses.</p>
+                </div>
+                <!-- Carte 5 : Métiers opérationnels aéroport -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="aeroport">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#E8F2FA] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-plane-arrival text-2xl md:text-3xl text-[#005BA1]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Opérations aéroport</h3>
+                    <p class="text-sm text-gray-500">Agent d'escale, coordination au sol.</p>
+                </div>
+                <!-- Carte 6 : Service client voyageur -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[var(--shadow-card)] card-lift text-center border border-gray-100/70 group cursor-pointer" data-formation="service">
+                    <div class="w-16 h-16 md:w-[72px] md:h-[72px] bg-[#FFF4EB] rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-headset text-2xl md:text-3xl text-[#E87822]"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-[#0B1A2E] mb-2">Service client voyageur</h3>
+                    <p class="text-sm text-gray-500">Accueil, relation client, satisfaction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALE FORMATION -->
+    <div id="formationModal" class="modal">
+        <div class="modal-content p-6 md:p-8 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            <div id="modalBody">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MÉDIAS -->
+    <section id="medias" class="py-16 md:py-24 bg-white relative">
+        <div class="container mx-auto px-5 md:px-8">
+            <div class="text-center mb-12 md:mb-16">
+                <span class="inline-block text-[#E87822] text-sm font-bold uppercase tracking-[0.18em] mb-3 bg-orange-50 px-4 py-1.5 rounded-full">Galerie</span>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B1A2E] mb-4">Nos <span class="text-[#005BA1]">Médias</span></h2>
+                <div class="divider-accent"></div>
+                <p class="text-gray-500 max-w-xl mx-auto text-sm md:text-base">Un aperçu de notre environnement de formation et de nos moments forts.</p>
+            </div>
+            <div class="media-scroll overflow-x-auto whitespace-nowrap pb-4 -mx-2 px-2" role="region" aria-label="Galerie médias">
+                <div class="inline-flex gap-4 md:gap-6 items-stretch">
+                    <video controls class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md flex-shrink-0" preload="metadata">
+                        <source src="medias-ICAC/MVI_5743.MP4" type="video/mp4">
+                    </video>
+                    <img src="medias-ICAC/IMG_5605.JPG" alt="Média ICAC 1" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5654.JPG" alt="Média ICAC 2" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5683.JPG" alt="Média ICAC 3" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5684.JPG" alt="Média ICAC 4" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <div class="flex items-center px-3 flex-shrink-0">
+                        <span class="text-gray-400 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-arrows-left-right"></i> Faites glisser
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSCRIPTION -->
+    <section id="inscription" class="py-16 md:py-24 bg-gray-50/80 relative">
+        <div class="absolute inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(circle at 50% 0%, #E8F2FA 0%, transparent 60%);"></div>
+        <div class="container mx-auto px-5 md:px-8 max-w-3xl relative z-10">
+            <div class="bg-white border border-gray-100/80 rounded-[2rem] p-6 sm:p-8 md:p-12 shadow-[var(--shadow-lg-soft)]">
+                <div class="text-center mb-8 md:mb-10">
+                    <span class="inline-block text-[#E87822] text-sm font-bold uppercase tracking-[0.18em] mb-3 bg-orange-50 px-4 py-1.5 rounded-full">Rejoignez-nous</span>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B1A2E] mb-2">Fiche d'Inscription</h2>
+                    <p class="text-sm md:text-base text-gray-500">Remplissez ce formulaire pour être contacté <strong>directement sur WhatsApp</strong>.</p>
+                </div>
+                <form id="whatsappForm" class="space-y-5">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="nom" class="block mb-2 font-semibold text-xs uppercase tracking-[0.12em] text-gray-500">Nom & Prénoms</label>
+                            <input type="text" id="nom" required placeholder="Ex : Patrick Amavi" class="input-focus-ring w-full p-3.5 md:p-4 border-2 border-gray-200 rounded-2xl bg-gray-50/50 placeholder:text-gray-400 text-gray-800 font-medium transition">
+                        </div>
+                        <div>
+                            <label for="tel" class="block mb-2 font-semibold text-xs uppercase tracking-[0.12em] text-gray-500">Téléphone</label>
+                            <input type="tel" id="tel" required placeholder="+225 07..." class="input-focus-ring w-full p-3.5 md:p-4 border-2 border-gray-200 rounded-2xl bg-gray-50/50 placeholder:text-gray-400 text-gray-800 font-medium transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="formation" class="block mb-2 font-semibold text-xs uppercase tracking-[0.12em] text-gray-500">Formation souhaitée</label>
+                        <select id="formation" required class="input-focus-ring w-full p-3.5 md:p-4 border-2 border-gray-200 rounded-2xl bg-gray-50/50 text-gray-800 font-medium transition appearance-none cursor-pointer" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%236b7280%22><path fill-rule=%22evenodd%22 d=%22M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z%22 clip-rule=%22evenodd%22/></svg>'); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5rem;">
+                            <option value="">Sélectionnez votre parcours</option>
+                            <option value="Voyage & Tourisme">Voyage & Tourisme</option>
+                            <option value="Systèmes de réservation (GDS)">Systèmes de réservation (GDS)</option>
+                            <option value="Hôtesse de l'air / Steward">Hôtesse de l'air / Steward</option>
+                            <option value="Fret aérien et marchandises dangereuses">Fret aérien et marchandises dangereuses</option>
+                            <option value="Métiers opérationnels en aéroport">Métiers opérationnels en aéroport</option>
+                            <option value="Service client voyageur">Service client voyageur</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-cta w-full bg-[#E87822] text-white py-4 md:py-5 rounded-2xl text-lg font-bold hover:bg-[#c95e14] transition-colors shadow-lg shadow-orange-200/40 flex items-center justify-center gap-3">
+                        <i class="fa-brands fa-whatsapp text-xl md:text-2xl"></i> Soumettre via WhatsApp
+                    </button>
+                    <p class="text-center text-[10px] md:text-xs text-gray-400 mt-3">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Vos données sont transmises de manière sécurisée.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTENAIRES -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-5 md:px-8 text-center">
+            <h3 class="text-xl md:text-2xl font-bold text-[#0B1A2E] mb-6">Nos Partenaires</h3>
+            <div class="flex flex-wrap justify-center items-center gap-6 md:gap-12 text-gray-500 text-sm md:text-base font-medium">
+                <span class="bg-gray-50 px-4 py-2 rounded-lg"><img src="ptn1.png" alt="Partenaire 1" class="h-8"></span>
+                <span class="bg-gray-50 px-4 py-2 rounded-lg"><img src="ptn2.jpg" alt="Partenaire 2" class="h-8"></span>
+                <span class="bg-gray-50 px-4 py-2 rounded-lg"><img src="ptn3.jpg" alt="Partenaire 3" class="h-8"></span>
+                <span class="bg-gray-50 px-4 py-2 rounded-lg"><img src="ptn4.png" alt="Partenaire 4" class="h-8"></span>
+                <span class="bg-gray-50 px-4 py-2 rounded-lg"><img src="ptn5.png" alt="Partenaire 5" class="h-8"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#0B1A2E] text-white pt-12 md:pt-20 pb-8 relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: radial-gradient(circle at 30% 70%, white 1px, transparent 1px); background-size: 50px 50px;"></div>
+        <div class="container mx-auto px-5 md:px-8 relative z-10">
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-14 text-center md:text-left">
+                <div class="sm:col-span-2 md:col-span-1">
+                    <img src="LOGO%20ICAC%20AVIATION_1.png" alt="Logo ICAC Aviation" class="h-14 md:h-16 mb-4 mx-auto md:mx-0 footer-logo-invert object-contain" loading="lazy">
+                    <p class="text-gray-400 leading-relaxed text-sm md:text-base max-w-xs mx-auto md:mx-0">
+                        Votre passerelle vers une carrière internationale dans le ciel et le tourisme. Excellence et rigueur à votre service.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 inline-block relative">
+                        Nous contacter
+                        <span class="absolute -bottom-1.5 left-0 w-10 h-0.5 bg-[#E87822] rounded"></span>
+                    </h4>
+                    <ul class="space-y-3 text-gray-300 text-sm md:text-base">
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fa-solid fa-phone w-6 text-[#E87822] text-center"></i> +225 27 22 34 14 42
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fa-solid fa-phone w-6 text-[#E87822] text-center"></i> +225 07 57 14 49 03
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fa-solid fa-phone w-6 text-[#E87822] text-center"></i> +225 05 46 97 14 57
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fa-solid fa-envelope w-6 text-[#E87822] text-center"></i> icac.aviation@gmail.com
+                        </li>
+                    </ul>
+                </div>
+                <div class="sm:col-span-2 md:col-span-1">
+                    <h4 class="text-lg font-bold mb-4 inline-block relative">
+                        Localisation
+                        <span class="absolute -bottom-1.5 left-0 w-10 h-0.5 bg-[#E87822] rounded"></span>
+                    </h4>
+                    <p class="text-gray-300 leading-relaxed text-sm md:text-base flex items-start justify-center md:justify-start gap-3">
+                        <i class="fa-solid fa-location-dot text-[#E87822] mt-1 w-6 text-center shrink-0"></i>
+                        <span>Abidjan — Cocody Angré<br>Carrefour les Oscars,<br>face à la pharmacie.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700/60 mt-10 pt-6 text-center text-gray-500 text-xs md:text-sm flex flex-col sm:flex-row justify-between items-center gap-3">
+                <p>&copy; 2026 <strong class="text-gray-300">ICAC Aviation</strong>. Tous droits réservés.</p>
+                <div class="flex gap-4">
+                    <a href="#accueil" class="hover:text-white transition-colors">Accueil</a>
+                    <a href="#formations" class="hover:text-white transition-colors">Formations</a>
+                    <a href="#inscription" class="hover:text-white transition-colors">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOUTON RETOUR EN HAUT AVION -->
+    <button id="backToTop" class="back-to-top" aria-label="Retour en haut">
+        <i class="fa-solid fa-plane-up"></i>
+    </button>
+
+    <script>
+        // Menu mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const bar1 = document.getElementById('bar1');
+        const bar2 = document.getElementById('bar2');
+        const bar3 = document.getElementById('bar3');
+        let menuOpen = false;
+
+        menuToggle.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            mobileMenu.classList.toggle('open', menuOpen);
+            menuToggle.setAttribute('aria-expanded', menuOpen);
+            bar1.style.transform = menuOpen ? 'translateY(7px) rotate(45deg)' : 'translateY(0) rotate(0)';
+            bar2.style.opacity = menuOpen ? '0' : '1';
+            bar3.style.transform = menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'translateY(0) rotate(0)';
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                bar1.style.transform = 'translateY(0) rotate(0)';
+                bar2.style.opacity = '1';
+                bar3.style.transform = 'translateY(0) rotate(0)';
+            });
+        });
+
+        // Formulaire WhatsApp
+        document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nom = document.getElementById('nom').value.trim();
+            const tel = document.getElementById('tel').value.trim();
+            const formation = document.getElementById('formation').value;
+            const destinataire = "2250757144903";
+            const message = "Bonjour l'équipe ICAC Aviation,\n\n" +
+                "Je m'appelle *" + nom + "* et je souhaiterais m'inscrire à votre formation : *" + formation + "* .\n\n" +
+                "Voici mes coordonnées :\n" +
+                "📞 Téléphone : " + tel + "\n\n" +
+                "Je serais ravi de recevoir plus d'informations pour finaliser mon inscription. Merci d'avance !";
+            window.open("https://wa.me/" + destinataire + "?text=" + encodeURIComponent(message), '_blank');
+        });
+
+        // Modale formations
+        const modal = document.getElementById('formationModal');
+        const modalBody = document.getElementById('modalBody');
+        const closeModal = document.getElementById('closeModal');
+
+        const formationData = {
+            voyage: {
+                title: 'Voyage & Tourisme',
+                icon: 'fa-earth-africa',
+                color: '#005BA1',
+                bg: '#E8F2FA',
+                objectif: 'Former des spécialistes du voyage capables d’organiser et de gérer des services touristiques.',
+                modules: [
+                    'Voyage et Tourisme avec GDS (Comptoir, planification, conseils voyage)',
+                    'Tarification aérienne et billetterie (Fixation des prix, billetterie aérienne)',
+                    'Géographie et planification de voyage (Destinations, itinéraires, solutions de voyage)'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Diplôme certifié IATA, reconnu mondialement.',
+                stage: 'Stage professionnel garanti inclus.'
+            },
+            reservation: {
+                title: 'Systèmes de réservation',
+                icon: 'fa-laptop',
+                color: '#E87822',
+                bg: '#FFF4EB',
+                objectif: 'Maîtriser les outils utilisés par les agences de voyages et compagnies aériennes.',
+                modules: [
+                    'Formation sur Amadeus',
+                    'Formation sur Galileo',
+                    'Formation sur Sabre',
+                    'Utilisation des GDS (Global Distribution Systems)'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Diplôme certifié IATA.',
+                stage: 'Stage garanti.'
+            },
+            pn: {
+                title: 'Hôtesse de l\'air & Steward',
+                icon: 'fa-user-tie',
+                color: '#005BA1',
+                bg: '#E8F2FA',
+                objectif: 'Formation aux métiers du personnel navigant commercial (PNC).',
+                modules: [
+                    'Sécurité cabine et secourisme aéronautique',
+                    'Service client à bord',
+                    'Gestion des situations d\'urgence',
+                    'Excellence du service et protocole'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Diplôme IATA, conforme aux standards internationaux.',
+                stage: 'Stage pratique inclus.'
+            },
+            fret: {
+                title: 'Fret aérien & Marchandises dangereuses',
+                icon: 'fa-boxes-stacked',
+                color: '#E87822',
+                bg: '#FFF4EB',
+                objectif: 'Former des agents capables de traiter, transporter et coordonner le fret aérien, y compris les marchandises réglementées.',
+                modules: [
+                    'Gestion du fret aérien',
+                    'Manipulation des marchandises dangereuses (DG)',
+                    'Réglementation IATA DGR',
+                    'Coordination logistique aéroportuaire'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Certification IATA DGR.',
+                stage: 'Stage professionnel garanti.'
+            },
+            aeroport: {
+                title: 'Métiers opérationnels en aéroport',
+                icon: 'fa-plane-arrival',
+                color: '#005BA1',
+                bg: '#E8F2FA',
+                objectif: 'Devenir professionnel polyvalent des opérations au sol dans un aéroport.',
+                modules: [
+                    'Agent d’escale : accueil et assistance des passagers',
+                    'Agent d’opérations aéroportuaires : coordination des activités au sol'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Diplôme IATA.',
+                stage: 'Stage garanti en environnement aéroportuaire.'
+            },
+            service: {
+                title: 'Service client voyageur',
+                icon: 'fa-headset',
+                color: '#E87822',
+                bg: '#FFF4EB',
+                objectif: 'Renforcer les compétences en service à la clientèle et communication professionnelle.',
+                modules: [
+                    'Accueil et relation client',
+                    'Gestion des réclamations',
+                    'Communication professionnelle',
+                    'Satisfaction et fidélisation des voyageurs'
+                ],
+                duree: '3 à 6 mois',
+                certification: 'Attestation IATA de compétences.',
+                stage: 'Stage inclus.'
+            }
+        };
+
+        document.querySelectorAll('#formationGrid .cursor-pointer').forEach(card => {
+            card.addEventListener('click', () => {
+                const key = card.dataset.formation;
+                const data = formationData[key];
+                if (!data) return;
+                modalBody.innerHTML = `
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:${data.bg}">
+                            <i class="fa-solid ${data.icon} text-2xl md:text-3xl" style="color:${data.color}"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-[#0B1A2E]">${data.title}</h3>
+                    </div>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <h4 class="font-bold text-[#005BA1] flex items-center gap-2"><i class="fa-solid fa-bullseye"></i> Objectif</h4>
+                            <p class="text-gray-600">${data.objectif}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#005BA1] flex items-center gap-2"><i class="fa-solid fa-list-check"></i> Modules</h4>
+                            <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                                ${data.modules.map(m => `<li>${m}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="grid sm:grid-cols-3 gap-3 text-center">
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <span class="block text-lg font-bold text-[#0B1A2E]">${data.duree}</span>
+                                <span class="text-xs text-gray-500">Durée</span>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <span class="block text-lg font-bold text-[#0B1A2E]"><i class="fa-solid fa-award"></i></span>
+                                <span class="text-xs text-gray-500">${data.certification}</span>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <span class="block text-lg font-bold text-[#E87822]"><i class="fa-solid fa-briefcase"></i></span>
+                                <span class="text-xs text-gray-500">${data.stage}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                modal.classList.add('active');
+            });
+        });
+
+        closeModal.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+
+        // Bouton retour en haut
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
