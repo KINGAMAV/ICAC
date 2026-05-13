@@ -256,7 +256,9 @@
     <!-- HERO -->
     <section id="accueil" class="relative min-h-[600px] md:min-h-[700px] flex items-center text-white overflow-hidden">
         <div class="hero-video-wrapper">
-            <iframe class="absolute inset-0 w-full h-full border-0" src="https://www.youtube.com/embed/O3VQkQto3MU?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&playlist=O3VQkQto3MU&rel=0&showinfo=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="ICAC Day vidéo"></iframe>
+            <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+                <source src="medias-ICAC/déco.mp4" type="video/mp4">
+            </video>
             <div class="hero-overlay"></div>
         </div>
         <div class="container mx-auto px-5 md:px-8 flex flex-col md:flex-row items-center relative z-10 py-12 md:py-0">
@@ -432,13 +434,13 @@
             </div>
             <div class="media-scroll overflow-x-auto whitespace-nowrap pb-4 -mx-2 px-2" role="region" aria-label="Galerie médias">
                 <div class="inline-flex gap-4 md:gap-6 items-stretch">
-                    <video controls class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md flex-shrink-0" preload="metadata">
+                    <video controls class="h-56 sm:h-64 md:h-96 w-auto rounded-xl md:rounded-2xl shadow-md flex-shrink-0" preload="metadata">
                         <source src="medias-ICAC/icacday.mp4" type="video/mp4">
                     </video>
-                    <img src="medias-ICAC/IMG_5605.JPG" alt="Média ICAC 1" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
-                    <img src="medias-ICAC/IMG_5654.JPG" alt="Média ICAC 2" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
-                    <img src="medias-ICAC/IMG_5683.JPG" alt="Média ICAC 3" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
-                    <img src="medias-ICAC/IMG_5684.JPG" alt="Média ICAC 4" class="h-48 sm:h-56 md:h-72 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5605.JPG" alt="Média ICAC 1" class="h-56 sm:h-64 md:h-96 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5654.JPG" alt="Média ICAC 2" class="h-56 sm:h-64 md:h-96 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5683.JPG" alt="Média ICAC 3" class="h-56 sm:h-64 md:h-96 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
+                    <img src="medias-ICAC/IMG_5684.JPG" alt="Média ICAC 4" class="h-56 sm:h-64 md:h-96 w-auto rounded-xl md:rounded-2xl shadow-md object-cover flex-shrink-0" loading="lazy">
                     <div class="flex items-center px-3 flex-shrink-0">
                         <span class="text-gray-400 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
                             <i class="fa-solid fa-arrows-left-right"></i> Faites glisser
